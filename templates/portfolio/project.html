@@ -1,0 +1,256 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    /* Section title animation */
+    .section-title {
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5, #ff00ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        bottom: -10px;
+        left: 0;
+        animation: expandWidth 1s ease-out 0.5s both;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes expandWidth {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    /* Card animations */
+    .project-card, .edu-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(48, 43, 99, 0.8));
+        border: 2px solid rgba(0, 210, 255, 0.3);
+        animation: fadeInUp 0.6s ease-out backwards;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .project-card::before, .edu-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .project-card:hover::before, .edu-card:hover::before {
+        left: 100%;
+    }
+
+    .project-card:hover, .edu-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: #00d2ff;
+        box-shadow: 0 15px 40px rgba(0, 210, 255, 0.4);
+    }
+
+    /* Stagger animation for cards */
+    .project-card:nth-child(1), .edu-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+    .project-card:nth-child(2), .edu-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .project-card:nth-child(3), .edu-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+    .project-card:nth-child(4), .edu-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+    .project-card:nth-child(5), .edu-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Image zoom effect */
+    .card-img-top {
+        transition: transform 0.5s ease;
+        position: relative;
+    }
+
+    .project-card:hover .card-img-top {
+        transform: scale(1.1);
+    }
+
+    /* Button animations */
+    .btn-view {
+        background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-view::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.5s, height 0.5s;
+    }
+
+    .btn-view:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 210, 255, 0.5);
+    }
+
+    /* Tech stack badge animation */
+    .tech-stack {
+        display: inline-block;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .card-img-top {
+            height: 180px !important;
+        }
+    }
+</style>
+
+<!-- PROJECTS SECTION -->
+<section class="py-5">
+    <h1 class="fw-bold text-center my-5 section-title">Projects</h1>
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            {% for project in projects %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card project-card h-100 shadow-lg text-light">
+                    <div style="overflow: hidden;">
+                        <img src="{{ project.project_image.url }}"
+                            alt="{{ project.project_name }}"
+                            class="card-img-top rounded-top"
+                            style="height: 220px; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title fw-bold"
+                            style="color: #00d2ff;">{{ project.project_name}}</h5>
+                        <p class="card-text flex-grow-1 text-light"
+                            style="opacity: 0.9;">{{project.project_description}}</p>
+                        <p class="card-text mb-3 tech-stack">
+                            <b style="color: #3a7bd5;">Tech Stack:</b> <span
+                                class="text-warning">{{ project.tech_stack}}</span>
+                        </p>
+                        <a href="{% url 'project_detail' project.pk %}"
+                            class="btn btn-view mt-auto">
+                            <i class="fas fa-eye me-2"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted my-5">
+                <h4 style="animation: fadeIn 1s ease;">No projects added
+                    yet.</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- EDUCATION SECTION -->
+<section class="py-5">
+    <h1 class="fw-bold text-center my-5 section-title">Education</h1>
+    <div class="container mx-auto">
+        <div class="row g-4 justify-content-center">
+            {% for edu in education %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card edu-card h-100 text-light shadow-sm p-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold" style="color: #00d2ff;">
+                            <i
+                                class="fas fa-graduation-cap me-2"></i>{{edu.institute_name }}
+                        </h5>
+                        <p class="card-text mb-2">
+                            <b style="color: #3a7bd5;">Course:</b> <span
+                                class="text-light">{{ edu.course_name }}</span>
+                        </p>
+                        <p class="card-text mb-2">
+                            <b style="color: #3a7bd5;">Passout Year:</b> <span
+                                class="text-warning">{{ edu.course_year}}</span>
+                        </p>
+                        <p class="card-text">
+                            <b style="color: #3a7bd5;">CGPA / Percentage:</b>
+                            <span class="text-success">{{ edu.cgpa_or_percentage}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted my-5">
+                <h4 style="animation: fadeIn 1s ease;">No education details
+                    available.</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

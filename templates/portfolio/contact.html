@@ -1,0 +1,204 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Contact form container animation */
+    .contact-container {
+        animation: zoomIn 0.8s ease-out;
+        background: linear-gradient(135deg, rgba(48, 43, 99, 0.9), rgba(26, 26, 46, 0.9));
+        border: 2px solid rgba(0, 210, 255, 0.3);
+        box-shadow: 0 10px 40px rgba(0, 210, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .contact-container:hover {
+        border-color: #00d2ff;
+        box-shadow: 0 15px 50px rgba(0, 210, 255, 0.4);
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Input field styling */
+    input, textarea {
+        border: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+        background: transparent;
+        color: #ffffff;
+        border-radius: 0;
+        outline: none;
+        box-shadow: none;
+        transition: all 0.3s ease;
+    }
+
+    /* Brighter, glowing placeholders */
+    input::placeholder, textarea::placeholder {
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    }
+
+    input:focus, textarea:focus {
+        border-bottom-color: #00d2ff;
+        box-shadow: 0 2px 10px rgba(0, 210, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    textarea {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    textarea:focus {
+        border-color: #00d2ff;
+    }
+
+    /* Contact info animations */
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        animation: fadeInLeft 0.6s ease-out backwards;
+    }
+
+    .contact-item:nth-child(1) { animation-delay: 0.2s; }
+    .contact-item:nth-child(2) { animation-delay: 0.3s; }
+    .contact-item:nth-child(3) { animation-delay: 0.4s; }
+
+    .contact-item:hover {
+        transform: translateX(10px);
+        color: #00d2ff;
+    }
+
+    @keyframes fadeInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Icon glow effect */
+    .contact-item:hover .icon {
+        filter: drop-shadow(0 0 10px #00d2ff);
+    }
+
+    /* Submit button animation */
+    .btn-submit {
+        background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+    }
+
+    .btn-submit::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-submit:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 210, 255, 0.6);
+    }
+
+    /* Title animation */
+    .contact-title {
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5, #ff00ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Right-side fade-in form */
+    @keyframes fadeInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .contact-container {
+            width: 90% !important;
+            padding: 2rem !important;
+        }
+    }
+</style>
+
+<div class="container contact-container text-white p-5 rounded-3 my-5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-4"
+    style="width: 65%; min-height: 400px;">
+
+    <div class="fw-bold text-start">
+        <h3 class="contact-title mb-4">Get in Touch</h3>
+
+        <div class="contact-item">
+            <span class="icon" style="font-size: 1.5rem;">✉️</span>
+            <span class="text-white-50">rudrapratappadhan2211@gmail.com</span>
+        </div>
+
+        <div class="contact-item">
+            <span class="icon" style="font-size: 1.5rem;">📞</span>
+            <span class="text-white-50">7735923015</span>
+        </div>
+
+        <div class="contact-item">
+            <span class="icon" style="font-size: 1.5rem;">📌</span>
+            <span class="text-white-50">Bargarh, Odisha</span>
+        </div>
+    </div>
+
+    <div class="text-end w-100 w-md-50" style="animation: fadeInRight 0.8s ease-out;">
+        <form method="post" action="{% url 'contact' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="name" placeholder="Enter your name"
+                    class="form-control bg-transparent text-white" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" name="email" placeholder="Enter your email"
+                    class="form-control bg-transparent text-white" required>
+            </div>
+            <div class="mb-3">
+                <textarea name="message" placeholder="Enter your message"
+                    class="form-control bg-transparent text-white" rows="4"
+                    required></textarea>
+            </div>
+            <button type="submit" class="btn btn-submit fw-bold px-5 py-2">
+                <i class="fas fa-paper-plane me-2"></i>Send
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,390 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    /* Hero section animation */
+    .project-hero {
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Image container with gradient overlay */
+    .project-image-container {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 210, 255, 0.3);
+        animation: zoomIn 1.2s ease-out;
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .project-image-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent 0%, rgba(15, 12, 41, 0.7) 100%);
+        z-index: 1;
+    }
+
+    .project-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .project-image-container:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Video container styling */
+    .project-video-container {
+        margin-top: 2rem;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 210, 255, 0.3);
+        animation: zoomIn 1.4s ease-out;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .project-video-container video {
+        width: 100%;
+        height: auto;
+        max-height: 450px;
+        display: block;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .project-video-container:hover video {
+        transform: scale(1.02);
+    }
+
+    /* Content sections */
+    .detail-section {
+        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(48, 43, 99, 0.8));
+        border: 2px solid rgba(0, 210, 255, 0.3);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        animation: slideInUp 0.8s ease-out backwards;
+        transition: all 0.3s ease;
+    }
+
+    .detail-section:hover {
+        border-color: #00d2ff;
+        box-shadow: 0 10px 30px rgba(0, 210, 255, 0.3);
+        transform: translateY(-5px);
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .detail-section:nth-child(1) { animation-delay: 0.2s; }
+    .detail-section:nth-child(2) { animation-delay: 0.3s; }
+    .detail-section:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Title styling */
+    .project-title {
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5, #ff00ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        animation: slideInLeft 1s ease-out;
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Tech stack badges */
+    .tech-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        margin: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        animation: bounceIn 0.6s ease-out backwards;
+        transition: all 0.3s ease;
+    }
+
+    .tech-badge:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 210, 255, 0.5);
+    }
+
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Back button */
+    .btn-back {
+        background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+    }
+
+    .btn-back:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 210, 255, 0.6);
+        color: white;
+    }
+
+    /* Related projects card */
+    .related-card {
+        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(48, 43, 99, 0.8));
+        border: 2px solid rgba(0, 210, 255, 0.3);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        animation: fadeInUp 0.8s ease-out backwards;
+    }
+
+    .related-card:hover {
+        transform: translateY(-10px);
+        border-color: #00d2ff;
+        box-shadow: 0 15px 40px rgba(0, 210, 255, 0.4);
+    }
+
+    .related-card img {
+        transition: transform 0.5s ease;
+    }
+
+    .related-card:hover img {
+        transform: scale(1.1);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .related-card:nth-child(1) { animation-delay: 0.5s; }
+    .related-card:nth-child(2) { animation-delay: 0.6s; }
+    .related-card:nth-child(3) { animation-delay: 0.7s; }
+
+    /* Section headings */
+    .section-heading {
+        color: #00d2ff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .section-heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .project-title {
+            font-size: 2rem;
+        }
+        
+        .project-image-container {
+            height: 300px;
+        }
+        
+        .detail-section {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<!-- Back Button -->
+<div class="container mt-4">
+    <a href="{% url 'project' %}" class="btn btn-back">
+        <i class="fas fa-arrow-left me-2"></i>Back to Projects
+    </a>
+</div>
+
+<!-- Project Hero Section -->
+<div class="container py-5 project-hero">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="project-title text-center">{{ project.project_name}}</h1>
+        </div>
+    </div>
+
+    <!-- Project Image -->
+    <div class="row mb-5">
+        <div class="col-12">
+            {% if project.video %}
+            <div class="project-video-container">
+                <video src="{{ project.video.url }}" muted autoplay loop
+                    controls style="border-radius: 20px;"></video>
+            </div>
+            {% else %}
+            <div class="project-image-container">
+                <img src="{{ project.project_image.url }}"
+                    alt="{{ project.project_name }}">
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Project Details -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <!-- Description Section -->
+            <div class="detail-section">
+                <h3 class="section-heading">
+                    <i class="fas fa-info-circle me-2"></i>Project Overview
+                </h3>
+                <p class="text-light"
+                    style="font-size: 1.1rem; line-height: 1.8; opacity: 0.9;">
+                    {{ project.project_description }}
+                </p>
+            </div>
+
+            <!-- Tech Stack Section -->
+            <div class="detail-section">
+                <h3 class="section-heading">
+                    <i class="fas fa-code me-2"></i>Technologies Used
+                </h3>
+                <div class="tech-stack-container">
+                    {% for tech in project.tech_stack.split %}
+                    <span class="tech-badge">
+                        {{ tech }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Project Info Section -->
+            <div class="detail-section">
+                <h3 class="section-heading">
+                    <i class="fas fa-calendar-alt me-2"></i>Project Information
+                </h3>
+                <div class="row text-light">
+                    <div class="col-md-6 mb-3">
+                        <p><strong style="color: #00d2ff;">Created:</strong>
+                            {{project.created_at|date:"F d, Y" }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <p><strong style="color: #00d2ff;">Status:</strong>
+                            <span class="badge bg-success">Completed</span></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Related Projects Section -->
+    {% if related_projects %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5"
+                style="color: #00d2ff; font-weight: 700;">
+                <i class="fas fa-project-diagram me-2"></i>Related Projects
+            </h2>
+        </div>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for related in related_projects %}
+        <div class="col-md-4">
+            <div class="card related-card h-100 text-light">
+                <div style="overflow: hidden; height: 200px;">
+                    <img src="{{ related.project_image.url }}"
+                        alt="{{ related.project_name }}"
+                        class="card-img-top"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold" style="color: #00d2ff;">
+                        {{ related.project_name }}
+                    </h5>
+                    <p class="card-text text-light"
+                        style="opacity: 0.9; font-size: 0.9rem;">
+                        {{ related.project_description|truncatewords:15 }}
+                    </p>
+                    <a href="{% url 'project_detail' related.pk %}"
+                        class="btn btn-sm mt-2"
+                        style="background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: white; border: none;">
+                        <i class="fas fa-eye me-2"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

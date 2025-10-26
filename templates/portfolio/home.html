@@ -1,0 +1,38 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .hero-text { animation: slideInLeft 1s ease-out; }
+    .hero-image { animation: slideInRight 1s ease-out; }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+    .profile-img { transition: all 0.5s ease; border: 4px solid transparent; background: linear-gradient(#0f0c29, #0f0c29) padding-box, linear-gradient(135deg, #00d2ff, #3a7bd5, #ff00ff) border-box; box-shadow: 0 10px 40px rgba(0, 210, 255, 0.3); }
+    .profile-img:hover { transform: scale(1.05) rotate(3deg); box-shadow: 0 15px 60px rgba(0, 210, 255, 0.6); }
+    .glow-text { background: linear-gradient(90deg, #00d2ff, #3a7bd5, #ff00ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: glow 2s ease-in-out infinite alternate; }
+    @keyframes glow { from { filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.5)); } to { filter: drop-shadow(0 0 20px rgba(58, 123, 213, 0.8)); } }
+    .btn-download { position: relative; overflow: hidden; background: linear-gradient(135deg, #00d2ff, #3a7bd5); border: none; color: white; font-weight: 600; transition: all 0.4s ease; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4); }
+    .btn-download::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); transition: left 0.5s ease; }
+    .btn-download:hover::before { left: 100%; }
+    .btn-download:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 210, 255, 0.6); }
+    .intro-text { overflow: hidden; white-space: nowrap; animation: typing 3s steps(40) 1s both; }
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @media (max-width: 768px) { .profile-img { width: 200px !important; height: 200px !important; } .intro-text { white-space: normal; animation: none; } }
+</style>
+<div class="container mt-5 py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-md-6 mb-4 mb-md-0 hero-text">
+            <h1 class="fs-2 text-light fw-bold">Hi, 👋</h1>
+            <h1 class="fs-3 fw-bold mb-3 glow-text intro-text">I'm Rudrapratap Padhan</h1>
+            <p class="text-light fw-light lh-lg" style="font-size: 1.1rem; opacity: 0.9;">
+                I'm Rudra Pratap Padhan, a tech enthusiast and developer who enjoys crafting clean, efficient, and creative solutions. I love exploring new technologies and continuously improving my skills through real-world projects.
+            </p>
+            <a href="{% static 'resume/resume.pdf' %}" class="btn btn-download mt-4 px-4 py-2" download>
+                <i class="fa-solid fa-download me-2"></i> Download Resume
+            </a>
+        </div>
+        <div class="col-md-6 text-center hero-image">
+            <img src="{% static 'images/mypic.jpeg' %}" alt="Rudrapratap Padhan" class="profile-img rounded-circle shadow-lg" style="width: 280px; height: 280px; object-fit: cover;">
+        </div>
+    </div>
+</div>
+{% endblock %}
