@@ -1,1 +1,1 @@
-web: python create_admin.py && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn blog.wsgi --log-file -
+web: python manage.py initadmin && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn blog.wsgi --log-file -
