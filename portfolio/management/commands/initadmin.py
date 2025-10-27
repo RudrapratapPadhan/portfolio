@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 import os
 
 class Command(BaseCommand):
-    help = 'Creates a superuser if one does not exist'
+    help = 'Creates or updates superuser'
 
     def handle(self, *args, **options):
         User = get_user_model()
@@ -14,26 +14,38 @@ class Command(BaseCommand):
 
         if not password:
             self.stdout.write(
-                self.style.WARNING('No DJANGO_SUPERUSER_PASSWORD set. Skipping superuser creation.')
-            )
-            return
-
-        if User.objects.filter(username=username).exists():
-            self.stdout.write(
-                self.style.SUCCESS(f'Superuser "{username}" already exists.')
+                self.style.WARNING('No DJANGO_SUPERUSER_PASSWORD set. Skipping.')
             )
             return
 
         try:
-            User.objects.create_superuser(
+            # Get or create user
+            user, created = User.objects.get_or_create(
                 username=username,
-                email=email,
-                password=password
+                defaults={
+                    'email': email,
+                    'is_staff': True,
+                    'is_superuser': True,
+                }
             )
-            self.stdout.write(
-                self.style.SUCCESS(f'✅ Superuser "{username}" created successfully!')
-            )
+            
+            # Always update password (in case it changed)
+            user.set_password(password)
+            user.is_staff = True
+            user.is_superuser = True
+            user.email = email
+            user.save()
+            
+            if created:
+                self.stdout.write(
+                    self.style.SUCCESS(f'✅ Superuser "{username}" created!')
+                )
+            else:
+                self.stdout.write(
+                    self.style.SUCCESS(f'✅ Superuser "{username}" password updated!')
+                )
+                
         except Exception as e:
             self.stdout.write(
-                self.style.ERROR(f'❌ Error creating superuser: {e}')
+                self.style.ERROR(f'❌ Error: {e}')
             )
